@@ -1,0 +1,26 @@
+{
+  "name": "material-icons-translate",
+  "version": "1.0.0",
+  "description": "This gulp task translate all occurrences of material icons name to the unicode form",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecsea/material-icons-translate.git"
+  },
+  "keywords": [
+    "materia",
+    "icons",
+    "unicode",
+    "translate",
+    "gulp"
+  ],
+  "author": "Claudio Cardinale cardi@thecsea.it",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/thecsea/material-icons-translate/issues"
+  },
+  "homepage": "https://github.com/thecsea/material-icons-translate#readme"
+}
