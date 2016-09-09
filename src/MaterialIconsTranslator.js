@@ -22,6 +22,7 @@ module.exports = class MaterialIconsTranslator{
 };
 
 function getUnicode(name){
+    name = name.trim();
     var results = materialTable.filter(value=>value.key==name);
     if(results.length == 0)
         return null;

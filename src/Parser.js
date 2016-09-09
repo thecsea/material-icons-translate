@@ -7,46 +7,41 @@ module.exports = function(callback){
     "use strict";
     var Parser = require("jison").Parser;
 
-    var id = GLOBAL._parser.callbacks.push(callback)-1;
+    function setElement(ele){
+       var tmp = callback(ele);
+        if(tmp == null)
+            return ele;
+        return tmp;
+    }
+
+    var id = GLOBAL._parser.callbacks.push(setElement)-1;
 
     var grammar = {
         "lex": {
             "rules": [
                 ["\\s+",                    "/* skip whitespace */"],
-                ["[0-9]+(?:\\.[0-9]+)?\\b", "return 'NUMBER';"],
-                ["\\*",                     "return '*';"],
-                ["\\/",                     "return '/';"],
-                ["-",                       "return '-';"],
-                ["\\+",                     "return '+';"],
-                ["\\^",                     "return '^';"],
-                ["\\(",                     "return '(';"],
-                ["\\)",                     "return ')';"],
-                ["PI\\b",                   "return 'PI';"],
-                ["E\\b",                    "return 'E';"],
+                ["material-icons",          "return 'MATERIAL'"], //consider to insert \\b
+                ["<",                       "return 'LT'"],
+                [">",                       "return 'GT'"],
+                ["\\/",                     "return 'CLOSE'"],
+                ["[^<>\\/]*",                  "return 'CHARS'"],
                 ["$",                       "return 'EOF';"]
             ]
         },
 
-        "operators": [
-            ["left", "+", "-"],
-            ["left", "*", "/"],
-            ["left", "^"],
-            ["left", "UMINUS"]
-        ],
-
         "bnf": {
-            "expressions" :[[ "e EOF",   "GLOBAL._parser.callbacks["+id+"]($1); return $1;"  ]],
+            "expressions" :[[ "e EOF",   "return $1;"  ],[ "EOF",   "return '';"  ]],
 
-            "e" :[[ "e + e",   "$$ = $1 + $3;" ],
-                [ "e - e",   "$$ = $1 - $3;" ],
-                [ "e * e",   "$$ = $1 * $3;" ],
-                [ "e / e",   "$$ = $1 / $3;" ],
-                [ "e ^ e",   "$$ = Math.pow($1, $3);" ],
-                [ "- e",     "$$ = -$2;", {"prec": "UMINUS"} ],
-                [ "( e )",   "$$ = $2;" ],
-                [ "NUMBER",  "$$ = Number(yytext);" ],
-                [ "E",       "$$ = Math.E;" ],
-                [ "PI",      "$$ = Math.PI;" ]]
+            "e" :[
+                ["tag e", "$$ = $1 + $2"],
+                ["CHARS e", "$$ = $1 + $2"],
+                ["CHARS", "$$ = $1"],
+                ["tag", "$$ = $1"],
+            ],
+
+            "tag":[["LT CHARS GT element LT CLOSE CHARS GT", "$$ = $1 + $2 + $3+  $4 + $5 + $6 + $7 + $8;"]],
+
+            "element":["CHARS", "$$ = GLOBAL._parser.callbacks["+id+"]($1)"]
         }
     };
 
