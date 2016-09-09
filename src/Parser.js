@@ -14,34 +14,80 @@ module.exports = function(callback){
         return tmp;
     }
 
-    var id = GLOBAL._parser.callbacks.push(setElement)-1;
+    function setElements(elements){
+        return elements.split(/ /g).map(setElement).join(' ');
+    }
+
+    var id = GLOBAL._parser.callbacks.push(setElements)-1;
 
     var grammar = {
         "lex": {
             "rules": [
                 ["$",                       "return 'EOF';"],
-                ["\\s+",                    "/* skip whitespace */"],
                 ["material-icons",          "return 'MATERIAL'"], //consider to insert \\b
                 ["<",                       "return 'LT'"],
                 [">",                       "return 'GT'"],
                 ["\\/",                     "return 'CLOSE'"],
-                ["[^<>\\/]*",                  "return 'CHARS'"],
+                ["[^<>\\/]",               "return 'CHAR'"],
             ]
         },
 
         "bnf": {
-            "expressions" :[[ "e EOF",   "return $1;"  ]],
+            "expressions" :[[ "e EOF",   "return $1;"],[ "EOF","return '';"]],
 
             "e" :[
-                ["CHARS e", "$$ = $1+ $2;"],
+                ["text tag e", "$$ = $1+ $2 + $3;"],
+                ["text tag", "$$ = $1+ $2;"],
+                ["text", "$$ = $1;"],
+                ["tag e", "$$ = $1 + $2;"],
                 ["tag", "$$ = $1;"],
-                ["", "$$ = '';"]
             ],
 
             "tag":[
-                ["LT CHARS GT CHARS LT CLOSE CHARS GT e", "$$ = $1 + $2 + $3+  GLOBAL._parser.callbacks["+id+"]($4) + $5 + $6 + $7 + $8 +$9;"],
-                ["LT CHARS CLOSE GT e", "$$ = $1 + $2 + $3 + $4 + $5;"],
-                ["LT CHARS GT e", "$$ = $1 + $2 + $3 + $4;"],
+               ["open_close_tag", "$$ = $1;"],
+               ["open_tag tag close_tag", "$$ = $1 + $2 + $3;"],
+               ["open_tag text close_tag", "$$ = $1 + $2 + $3;"],
+               ["material_open_tag material_tag close_tag", "$$ = $1 + $2 + $3;"],
+               ["material_open_tag text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
+            ],
+
+            "material_tag":[
+                ["open_tag material_tag close_tag", "$$ = $1 + GLOBAL._parser.callbacks($2) + $3;"],
+                ["open_tag text close_tag", "$$ = $1 + GLOBAL._parser.callbacks($2) + $3;"],
+                ["material_open_tag material_tag close_tag", "$$ = $1 + GLOBAL._parser.callbacks($2) + $3;"],
+                ["material_open_tag text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
+            ],
+
+            "open_tag":[
+              ["LT words GT", "$$ = $1 + $2 + $3;"]
+            ],
+
+            "close_tag":[
+                ["LT CLOSE text GT", "$$ = $1 + $2 + $3 + $4;"]
+            ],
+
+            "material_open_tag":[
+                ["LT words MATERIAL words GT", "$$ = $1 + $2 + $3 + $4 + $5;"]
+            ],
+
+            "only_open_tag":[
+                ["LT text GT", "$$ = $1 + $2 + $3;"]
+            ],
+
+            "open_close_tag":[
+                ["LT text CLOSE GT", "$$ = $1 + $2 + $3 + $4;"]
+            ],
+
+            "text":[
+                ["words MATERIAL text", "$$ = $1 + $2;"],
+                ["MATERIAL text", "$$ = $1 + $2;"],
+                ["words", "$$ = $1;"],
+                ["MATERIAL", "$$ = $1;"],
+            ],
+
+            "words":[
+                ["CHAR words","$$ = $1 + $2;"],
+                ["CHAR","$$ = $1;"],
             ]
         }
     };
