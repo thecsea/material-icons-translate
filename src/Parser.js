@@ -19,13 +19,13 @@ module.exports = function(callback){
     var grammar = {
         "lex": {
             "rules": [
+                ["$",                       "return 'EOF';"],
                 ["\\s+",                    "/* skip whitespace */"],
                 ["material-icons",          "return 'MATERIAL'"], //consider to insert \\b
                 ["<",                       "return 'LT'"],
                 [">",                       "return 'GT'"],
                 ["\\/",                     "return 'CLOSE'"],
                 ["[^<>\\/]*",                  "return 'CHARS'"],
-                ["$",                       "return 'EOF';"]
             ]
         },
 
@@ -39,9 +39,7 @@ module.exports = function(callback){
                 ["tag", "$$ = $1"],
             ],
 
-            "tag":[["LT CHARS GT element LT CLOSE CHARS GT", "$$ = $1 + $2 + $3+  $4 + $5 + $6 + $7 + $8;"]],
-
-            "element":["CHARS", "$$ = GLOBAL._parser.callbacks["+id+"]($1)"]
+            "tag":[["LT CHARS GT CHARS LT CLOSE CHARS GT", "$$ = $1 + $2 + $3+  GLOBAL._parser.callbacks["+id+"]($4) + $5 + $6 + $7 + $8;"]]
         }
     };
 
