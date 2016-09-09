@@ -30,16 +30,19 @@ module.exports = function(callback){
         },
 
         "bnf": {
-            "expressions" :[[ "e EOF",   "return $1;"  ],[ "EOF",   "return '';"  ]],
+            "expressions" :[[ "e EOF",   "return $1;"  ]],
 
             "e" :[
-                ["tag e", "$$ = $1 + $2"],
-                ["CHARS e", "$$ = $1 + $2"],
-                ["CHARS", "$$ = $1"],
-                ["tag", "$$ = $1"],
+                ["CHARS e", "$$ = $1+ $2;"],
+                ["tag", "$$ = $1;"],
+                ["", "$$ = '';"]
             ],
 
-            "tag":[["LT CHARS GT CHARS LT CLOSE CHARS GT", "$$ = $1 + $2 + $3+  GLOBAL._parser.callbacks["+id+"]($4) + $5 + $6 + $7 + $8;"]]
+            "tag":[
+                ["LT CHARS GT CHARS LT CLOSE CHARS GT e", "$$ = $1 + $2 + $3+  GLOBAL._parser.callbacks["+id+"]($4) + $5 + $6 + $7 + $8 +$9;"],
+                ["LT CHARS CLOSE GT e", "$$ = $1 + $2 + $3 + $4 + $5;"],
+                ["LT CHARS GT e", "$$ = $1 + $2 + $3 + $4;"],
+            ]
         }
     };
 

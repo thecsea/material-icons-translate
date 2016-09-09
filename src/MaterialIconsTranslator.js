@@ -18,6 +18,9 @@ module.exports = class MaterialIconsTranslator{
         return parser.parse(this.content);
     }
 
+    static getUnicode(name){
+        return getUnicode(name);
+    }
 
 };
 
@@ -26,5 +29,5 @@ function getUnicode(name){
     var results = materialTable.filter(value=>value.key==name);
     if(results.length == 0)
         return null;
-    return '&#'+results[0].value;
+    return '&#x'+results[0].value.toUpperCase()+';';
 }

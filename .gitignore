@@ -101,3 +101,4 @@ fabric.properties
 
 ### NPM ###
 node_modules/
+coverage/
