@@ -24,6 +24,7 @@ module.exports = function(callback){
         "lex": {
             "rules": [
                 ["$",                       "return 'EOF';"],
+                ["\\s+",                       "return 'SPACES'"],
                 ["material-icons",          "return 'MATERIAL'"], //consider to insert \\b
                 ["area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr", "return 'NON_CLOSING'"], //consider to insert \\b
                 ["<",                       "return 'LT'"],
@@ -73,11 +74,18 @@ module.exports = function(callback){
             ],
 
             "only_open_tag":[
-                ["LT NON_CLOSING GT", "$$ = $1 + $2 + $3;"]
+                ["LT non_closing GT", "$$ = $1 + $2 + $3;"]
             ],
 
             "open_close_tag":[
-                ["LT NON_CLOSING CLOSE GT", "$$ = $1 + $2 + $3 + $4;"]
+                ["LT non_closing CLOSE GT", "$$ = $1 + $2 + $3 + $4;"]
+            ],
+
+            "non_closing":[
+                ["SPACES NON_CLOSING text","$$ = $1 + $2 + $3;"],
+                ["NON_CLOSING text","$$ = $1 + $2;"],
+                ["NON_CLOSING","$$ = $1;"],
+                ["SPACES NON_CLOSING","$$ = $1 + $2;"],
             ],
 
             "text":[
@@ -88,9 +96,14 @@ module.exports = function(callback){
             ],
 
             "words":[
-                ["CHAR words","$$ = $1 + $2;"],
+                ["word_element words","$$ = $1 + $2;"],
+                ["word_element","$$ = $1;"],
+            ],
+
+            "word_element":[
+                ["SPACES","$$ = $1;"],
                 ["CHAR","$$ = $1;"],
-            ]
+            ],
         }
     };
 
