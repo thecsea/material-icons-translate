@@ -38,9 +38,9 @@ module.exports = function(callback){
             "expressions" :[[ "e EOF",   "return $1;"],[ "EOF","return '';"]],
 
             "e" :[
-                ["text tag e", "$$ = $1+ $2 + $3;"],
-                ["text tag", "$$ = $1+ $2;"],
-                ["text", "$$ = $1;"],
+                ["full_text tag e", "$$ = $1+ $2 + $3;"],
+                ["full_text tag", "$$ = $1+ $2;"],
+                ["full_text", "$$ = $1;"],
                 ["tag e", "$$ = $1 + $2;"],
                 ["tag", "$$ = $1;"],
             ],
@@ -88,6 +88,19 @@ module.exports = function(callback){
                 ["SPACES NON_CLOSING","$$ = $1 + $2;"],
             ],
 
+            "closing":[
+                ["SPACES word","$$ = $1 + $2;"],
+                ["word","$$ = $1;"],
+            ],
+
+            "full_text":[
+                ["text NON_CLOSING full_text", "$$ = $1 + $2 + $3;"],
+                ["text NON_CLOSING", "$$ = $1 + $2;"],
+                ["NON_CLOSING full_text", "$$ = $1 + $2;"],
+                ["NON_CLOSING", "$$ = $1;"],
+                ["text", "$$ = $1;"],
+            ],
+
             "text":[
                 ["words MATERIAL text", "$$ = $1 + $2;"],
                 ["MATERIAL text", "$$ = $1 + $2;"],
@@ -96,13 +109,15 @@ module.exports = function(callback){
             ],
 
             "words":[
-                ["word_element words","$$ = $1 + $2;"],
-                ["word_element","$$ = $1;"],
+                ["SPACES words","$$ = $1 + $2;"],
+                ["SPACES","$$ = $1;"],
+                ["word SPACES words","$$ = $1 + $2 + $3;"],
+                ["word","$$ = $1;"],
             ],
 
-            "word_element":[
-                ["SPACES","$$ = $1;"],
-                ["CHAR","$$ = $1;"],
+            "word":[
+                ["CHAR word","$$ = $1 + $2;"],
+                ["CHAR","$$ = $1;"]
             ],
         }
     };
