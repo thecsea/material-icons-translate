@@ -25,6 +25,7 @@ module.exports = function(callback){
             "rules": [
                 ["$",                       "return 'EOF';"],
                 ["material-icons",          "return 'MATERIAL'"], //consider to insert \\b
+                ["area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr", "return 'NON_CLOSING'"], //consider to insert \\b
                 ["<",                       "return 'LT'"],
                 [">",                       "return 'GT'"],
                 ["\\/",                     "return 'CLOSE'"],
@@ -45,6 +46,7 @@ module.exports = function(callback){
 
             "tag":[
                ["open_close_tag", "$$ = $1;"],
+               ["only_open_tag", "$$ = $1;"],
                ["open_tag tag close_tag", "$$ = $1 + $2 + $3;"],
                ["open_tag text close_tag", "$$ = $1 + $2 + $3;"],
                ["material_open_tag material_tag close_tag", "$$ = $1 + $2 + $3;"],
@@ -71,11 +73,11 @@ module.exports = function(callback){
             ],
 
             "only_open_tag":[
-                ["LT text GT", "$$ = $1 + $2 + $3;"]
+                ["LT NON_CLOSING GT", "$$ = $1 + $2 + $3;"]
             ],
 
             "open_close_tag":[
-                ["LT text CLOSE GT", "$$ = $1 + $2 + $3 + $4;"]
+                ["LT NON_CLOSING CLOSE GT", "$$ = $1 + $2 + $3 + $4;"]
             ],
 
             "text":[
