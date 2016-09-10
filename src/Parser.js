@@ -26,7 +26,7 @@ module.exports = function(callback){
                 ["$",                       "return 'EOF';"],
                 ["\\s+",                       "return 'SPACES'"],
                 ["material-icons",          "return 'MATERIAL'"], //consider to insert \\b
-                ["area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr", "return 'NON_CLOSING'"], //consider to insert \\b
+                ["area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr|!DOCTYPE ", "return 'NON_CLOSING'"], //consider to insert \\b
                 ["<",                       "return 'LT'"],
                 [">",                       "return 'GT'"],
                 ["\\/",                     "return 'CLOSE'"],
@@ -48,21 +48,35 @@ module.exports = function(callback){
             "tag":[
                ["open_close_tag", "$$ = $1;"],
                ["only_open_tag", "$$ = $1;"],
-               ["open_tag tag close_tag", "$$ = $1 + $2 + $3;"],
+               ["open_tag recursive_tag close_tag", "$$ = $1 + $2 + $3;"],
                ["open_tag full_text close_tag", "$$ = $1 + $2 + $3;"],
                ["open_tag close_tag", "$$ = $1 + $2;"],
-               ["material_open_tag material_tag close_tag", "$$ = $1 + $2 + $3;"],
+               ["material_open_tag recursive_material_tag close_tag", "$$ = $1 + $2 + $3;"],
                ["material_open_tag full_text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
                ["material_open_tag close_tag", "$$ = $1 + $2;"],
             ],
 
+            "recursive_tag":[
+                ["full_text tag full_text", "$$ = $1 + $2 + $3;"],
+                ["full_text tag", "$$ = $1 + $2;"],
+                ["tag full_text", "$$ = $1 + $2;"],
+                ["tag", "$$ = $1;"],
+            ],
+
             "material_tag":[
-                ["open_tag material_tag close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
+                ["open_tag recursive_material_tag close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
                 ["open_tag full_text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
                 ["open_tag close_tag", "$$ = $1 + $2;"],
-                ["material_open_tag material_tag close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
+                ["material_open_tag recursive_material_tag close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
                 ["material_open_tag full_text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
                 ["material_open_tag close_tag", "$$ = $1 + $2;"],
+            ],
+
+            "recursive_material_tag":[
+                ["full_text material_tag full_text", "$$ = $1 + $2 + $3;"],
+                ["full_text material_tag", "$$ = $1 + $2;"],
+                ["material_tag full_text", "$$ = $1 + $2;"],
+                ["material_tag", "$$ = $1;"],
             ],
 
             "open_tag":[
