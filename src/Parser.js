@@ -49,16 +49,16 @@ module.exports = function(callback){
                ["open_close_tag", "$$ = $1;"],
                ["only_open_tag", "$$ = $1;"],
                ["open_tag tag close_tag", "$$ = $1 + $2 + $3;"],
-               ["open_tag text close_tag", "$$ = $1 + $2 + $3;"],
+               ["open_tag closing_text close_tag", "$$ = $1 + $2 + $3;"],
                ["material_open_tag material_tag close_tag", "$$ = $1 + $2 + $3;"],
-               ["material_open_tag text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
+               ["material_open_tag closing_text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
             ],
 
             "material_tag":[
                 ["open_tag material_tag close_tag", "$$ = $1 + GLOBAL._parser.callbacks($2) + $3;"],
-                ["open_tag text close_tag", "$$ = $1 + GLOBAL._parser.callbacks($2) + $3;"],
+                ["open_tag closing_text close_tag", "$$ = $1 + GLOBAL._parser.callbacks($2) + $3;"],
                 ["material_open_tag material_tag close_tag", "$$ = $1 + GLOBAL._parser.callbacks($2) + $3;"],
-                ["material_open_tag text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
+                ["material_open_tag closing_text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
             ],
 
             "open_tag":[
@@ -66,7 +66,7 @@ module.exports = function(callback){
             ],
 
             "close_tag":[
-                ["LT CLOSE text GT", "$$ = $1 + $2 + $3 + $4;"]
+                ["LT CLOSE closing_text GT", "$$ = $1 + $2 + $3 + $4;"]
             ],
 
             "material_open_tag":[
@@ -86,6 +86,11 @@ module.exports = function(callback){
                 ["NON_CLOSING text","$$ = $1 + $2;"],
                 ["NON_CLOSING","$$ = $1;"],
                 ["SPACES NON_CLOSING","$$ = $1 + $2;"],
+            ],
+
+            "closing_text":[
+                ["closing SPACES full_text", "$$ = $1 + $2;"],
+                ["closing", "$$ = $1;"],
             ],
 
             "closing":[
