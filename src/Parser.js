@@ -49,16 +49,20 @@ module.exports = function(callback){
                ["open_close_tag", "$$ = $1;"],
                ["only_open_tag", "$$ = $1;"],
                ["open_tag tag close_tag", "$$ = $1 + $2 + $3;"],
-               ["open_tag closing_text close_tag", "$$ = $1 + $2 + $3;"],
+               ["open_tag full_text close_tag", "$$ = $1 + $2 + $3;"],
+               ["open_tag close_tag", "$$ = $1 + $2;"],
                ["material_open_tag material_tag close_tag", "$$ = $1 + $2 + $3;"],
-               ["material_open_tag closing_text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
+               ["material_open_tag full_text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
+               ["material_open_tag close_tag", "$$ = $1 + $2;"],
             ],
 
             "material_tag":[
-                ["open_tag material_tag close_tag", "$$ = $1 + GLOBAL._parser.callbacks($2) + $3;"],
-                ["open_tag closing_text close_tag", "$$ = $1 + GLOBAL._parser.callbacks($2) + $3;"],
-                ["material_open_tag material_tag close_tag", "$$ = $1 + GLOBAL._parser.callbacks($2) + $3;"],
-                ["material_open_tag closing_text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
+                ["open_tag material_tag close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
+                ["open_tag full_text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
+                ["open_tag close_tag", "$$ = $1 + $2;"],
+                ["material_open_tag material_tag close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
+                ["material_open_tag full_text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
+                ["material_open_tag close_tag", "$$ = $1 + $2;"],
             ],
 
             "open_tag":[
@@ -70,7 +74,7 @@ module.exports = function(callback){
             ],
 
             "material_open_tag":[
-                ["LT closing_words MATERIAL words GT", "$$ = $1 + $2 + $3 + $4 + $5;"] //TODO insert words before MATERIAL (class=")
+                ["LT closing_words MATERIAL full_text GT", "$$ = $1 + $2 + $3 + $4 + $5;"] //TODO insert words before MATERIAL (class=")
             ],
 
             "only_open_tag":[
@@ -122,6 +126,7 @@ module.exports = function(callback){
                 ["NON_CLOSING words_with_non_closing","$$ = $1 + $2;"],
                 ["NON_CLOSING","$$ = $1;"],
                 ["words NON_CLOSING words_with_non_closing","$$ = $1 + $2 + $3;"],
+                ["words NON_CLOSING","$$ = $1 + $2;"],
                 ["words","$$ = $1;"],
             ],
 
@@ -129,12 +134,13 @@ module.exports = function(callback){
                 ["SPACES words","$$ = $1 + $2;"],
                 ["SPACES","$$ = $1;"],
                 ["word SPACES words","$$ = $1 + $2 + $3;"],
+                ["word SPACES","$$ = $1 + $2;"],
                 ["word","$$ = $1;"],
             ],
 
             "word":[
                 ["CHAR word","$$ = $1 + $2;"],
-                ["CHAR","$$ = $1;"]
+                ["CHAR","$$ = $1;"],
             ],
         }
     };
