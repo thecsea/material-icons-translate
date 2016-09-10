@@ -74,9 +74,24 @@ describe('Material Icons Translator', () => {
                 materialIconsTranslator.translate().should.be.equal('<br>aaaa');
             });
 
+            it('Should parse content without closing tag (double)', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<br ><br>aaaa');
+                materialIconsTranslator.translate().should.be.equal('<br ><br>aaaa');
+            });
+
             it('Should parse content with closing tag in the tag open', () => {
                 var materialIconsTranslator = new MaterialIconsTranslator('<br/>aaaa');
                 materialIconsTranslator.translate().should.be.equal('<br/>aaaa');
+            });
+
+            it('Should parse content with closing tag in the tag open (double)', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<br /><br/>aaaa');
+                materialIconsTranslator.translate().should.be.equal('<br /><br/>aaaa');
+            });
+
+            it('Should parse epty tag', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaaa></aaaa>');
+                materialIconsTranslator.translate().should.be.equal('<aaaa></aaaa>');
             });
 
             it('Should not parse content without valid HTML', () => {
@@ -88,6 +103,68 @@ describe('Material Icons Translator', () => {
                     thrown = true;
                 }
                 thrown.should.be.equal(true);
+            });
+        });
+
+        describe('Complex parsing', () => {
+            it('Should parse content inner other tags', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaaa><aaa class="material-icons">delete</aaa></aaaa>');
+                materialIconsTranslator.translate().should.be.equal('<aaaa><aaa class="material-icons">&#xE872;</aaa></aaaa>');
+            });
+
+            it('Should parse content inner other tags (external class)', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaaa class="material-icons"><aaa>delete</aaa></aaaa>');
+                materialIconsTranslator.translate().should.be.equal('<aaaa class="material-icons"><aaa>&#xE872;</aaa></aaaa>');
+            });
+
+            it('Should not parse content inner other tags (no class)', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaaa><aaa>delete</aaa></aaaa>');
+                materialIconsTranslator.translate().should.be.equal('<aaaa><aaa>delete</aaa></aaaa>');
+            });
+
+            it('Should allow to use non closing chars', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaaa><aaa>br</aaa></aaaa>');
+                materialIconsTranslator.translate().should.be.equal('<aaaa><aaa>br</aaa></aaaa>');
+            });
+
+            it('Should allow to use non closing chars 2', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaaa br><aaa></aaa></aaaa>');
+                materialIconsTranslator.translate().should.be.equal('<aaaa br><aaa></aaa></aaaa>');
+            });
+
+            it('Should allow to use non closing chars 3 (with class)', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaaa class="material-icons" br ><aaa></aaa></aaaa>');
+                materialIconsTranslator.translate().should.be.equal('<aaaa class="material-icons" br ><aaa></aaa></aaaa>');
+            });
+
+            it('Should allow to use non closing chars 4 (external)', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('br<aaaa><aaa></aaa></aaaa>');
+                materialIconsTranslator.translate().should.be.equal('br<aaaa><aaa></aaa></aaaa>');
+            });
+
+            it('Should allow to use non closing chars 5 (inside class)', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaaa class="material-icons br"><aaa>delete</aaa></aaaa>');
+                materialIconsTranslator.translate().should.be.equal('<aaaa class="material-icons br"><aaa>&#xE872;</aaa></aaaa>');
+            });
+
+            it('Should allow to use spaces', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaaa class="material-icons" ><aaa>delete</aaa></aaaa>');
+                materialIconsTranslator.translate().should.be.equal('<aaaa class="material-icons" ><aaa>&#xE872;</aaa></aaaa>');
+            });
+
+            it('Should allow to use material-icons as text 1', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaaa class="material-icons" ><aaa>material-icons</aaa></aaaa>');
+                materialIconsTranslator.translate().should.be.equal('<aaaa class="material-icons" ><aaa>material-icons</aaa></aaaa>');
+            });
+
+            it('Should allow to use material-icons as text 2', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('material-icons<aaaa class="material-icons" ><aaa>aaa</aaa></aaaa>');
+                materialIconsTranslator.translate().should.be.equal('material-icons<aaaa class="material-icons" ><aaa>aaa</aaa></aaaa>');
+            });
+
+            it('Should allow to use class in self-closed without parsing', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<br class="material-icons" ><aaa>delete</aaa>');
+                materialIconsTranslator.translate().should.be.equal('<br class="material-icons" ><aaa>delete</aaa>');
             });
         });
     });

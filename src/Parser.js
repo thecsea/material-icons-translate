@@ -98,7 +98,7 @@ module.exports = function(callback){
             ],
 
             "closing_text":[
-                ["closing SPACES full_text", "$$ = $1 + $2;"],
+                ["closing SPACES full_text", "$$ = $1 + $2 + $3;"],
                 ["closing", "$$ = $1;"],
             ],
 
@@ -116,7 +116,7 @@ module.exports = function(callback){
             ],
 
             "text":[
-                ["words MATERIAL text", "$$ = $1 + $2;"],
+                ["words MATERIAL text", "$$ = $1 + $2 + $3;"],
                 ["MATERIAL text", "$$ = $1 + $2;"],
                 ["words", "$$ = $1;"],
                 ["MATERIAL", "$$ = $1;"],
