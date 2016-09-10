@@ -62,7 +62,7 @@ module.exports = function(callback){
             ],
 
             "open_tag":[
-              ["LT words GT", "$$ = $1 + $2 + $3;"]
+              ["LT closing_words GT", "$$ = $1 + $2 + $3;"]
             ],
 
             "close_tag":[
@@ -70,7 +70,7 @@ module.exports = function(callback){
             ],
 
             "material_open_tag":[
-                ["LT words MATERIAL words GT", "$$ = $1 + $2 + $3 + $4 + $5;"]
+                ["LT closing_words MATERIAL words GT", "$$ = $1 + $2 + $3 + $4 + $5;"] //TODO insert words before MATERIAL (class=")
             ],
 
             "only_open_tag":[
@@ -86,6 +86,11 @@ module.exports = function(callback){
                 ["NON_CLOSING text","$$ = $1 + $2;"],
                 ["NON_CLOSING","$$ = $1;"],
                 ["SPACES NON_CLOSING","$$ = $1 + $2;"],
+            ],
+
+            "closing_words":[
+                ["closing SPACES words_with_non_closing", "$$ = $1 + $2 + $3;"],
+                ["closing", "$$ = $1;"],
             ],
 
             "closing_text":[
@@ -111,6 +116,13 @@ module.exports = function(callback){
                 ["MATERIAL text", "$$ = $1 + $2;"],
                 ["words", "$$ = $1;"],
                 ["MATERIAL", "$$ = $1;"],
+            ],
+
+            "words_with_non_closing":[
+                ["NON_CLOSING words_with_non_closing","$$ = $1 + $2;"],
+                ["NON_CLOSING","$$ = $1;"],
+                ["words NON_CLOSING words_with_non_closing","$$ = $1 + $2 + $3;"],
+                ["words","$$ = $1;"],
             ],
 
             "words":[
