@@ -112,9 +112,25 @@ describe('Material Icons Translator', () => {
                 materialIconsTranslator.translate().should.be.equal('<aaaa><aaa class="material-icons">&#xE872;</aaa></aaaa>');
             });
 
+            it('Should parse content into t2o different tags tags', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaa class="material-icons">delete</aaa><aaaa class="material-icons">delete</aaaa>');
+                materialIconsTranslator.translate().should.be.equal('<aaa class="material-icons">&#xE872;</aaa><aaaa class="material-icons">&#xE872;</aaaa>');
+            });
+
+            it('Should parse content inner other tags (2 tags)', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaaa><aaa class="material-icons">delete</aaa><aaa class="material-icons">delete</aaa></aaaa>');
+                materialIconsTranslator.translate().should.be.equal('<aaaa><aaa class="material-icons">&#xE872;</aaa><aaa class="material-icons">&#xE872;</aaa></aaaa>');
+            });
+
+
             it('Should parse content inner other tags (external class)', () => {
                 var materialIconsTranslator = new MaterialIconsTranslator('<aaaa class="material-icons"><aaa>delete</aaa></aaaa>');
                 materialIconsTranslator.translate().should.be.equal('<aaaa class="material-icons"><aaa>&#xE872;</aaa></aaaa>');
+            });
+
+            it('Should parse content inner other tags with middle text', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaaa>text<aaa class="material-icons">delete</aaa></aaaa>');
+                materialIconsTranslator.translate().should.be.equal('<aaaa>text<aaa class="material-icons">&#xE872;</aaa></aaaa>');
             });
 
             it('Should not parse content inner other tags (no class)', () => {
@@ -165,6 +181,21 @@ describe('Material Icons Translator', () => {
             it('Should allow to use class in self-closed without parsing', () => {
                 var materialIconsTranslator = new MaterialIconsTranslator('<br class="material-icons" ><aaa>delete</aaa>');
                 materialIconsTranslator.translate().should.be.equal('<br class="material-icons" ><aaa>delete</aaa>');
+            });
+
+            it('Should allow to use class in self-closed in material elements', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaaaa class="material-icons" ><aaa><br>delete</aaa></aaaaa>');
+                materialIconsTranslator.translate().should.be.equal('<aaaaa class="material-icons" ><aaa><br>&#xE872;</aaa></aaaaa>');
+            });
+
+            it('Should allow to insert blank spaces and new lines', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('    <html>\n<br class="material-icons" ><aaa>delete</aaa></html>');
+                materialIconsTranslator.translate().should.be.equal('    <html>\n<br class="material-icons" ><aaa>delete</aaa></html>');
+            });
+
+            it('Should allow to use html comments', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<!--comment--!>');
+                materialIconsTranslator.translate().should.be.equal('<!--comment--!>');
             });
         });
     });
