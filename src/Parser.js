@@ -27,56 +27,54 @@ module.exports = function(callback){
                 ["\\s+",                       "return 'SPACES'"],
                 ["material-icons",          "return 'MATERIAL'"], //consider to insert \\b
                 ["area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr|!DOCTYPE ", "return 'NON_CLOSING'"], //consider to insert \\b
+                ["<\\/",                     "return 'CLOSE_L'"],
+                ["\\/>",                     "return 'CLOSE_G'"],
                 ["<",                       "return 'LT'"],
                 [">",                       "return 'GT'"],
-                ["\\/",                     "return 'CLOSE'"],
                 ["[^<>\\/]",               "return 'CHAR'"],
             ]
         },
+        //TODO HTML comments
 
         "bnf": {
             "expressions" :[[ "e EOF",   "return $1;"],[ "EOF","return '';"]],
 
             "e" :[
-                ["full_text tag e", "$$ = $1+ $2 + $3;"],
-                ["full_text tag", "$$ = $1+ $2;"],
+                ["tags", "$$ = $1;"],
+            ],
+
+            "tags":[
                 ["full_text", "$$ = $1;"],
-                ["tag e", "$$ = $1 + $2;"],
                 ["tag", "$$ = $1;"],
+                ["full_text tag tags", "$$ = $1 + $2 + $3"],
+                ["full_text tag", "$$ = $1 + $2;"],
+                ["tag tags", "$$ = $1 + $2;"], //TODO insert also tag full_text tags?
             ],
 
             "tag":[
-               ["open_close_tag", "$$ = $1;"],
-               ["only_open_tag", "$$ = $1;"],
-               ["open_tag recursive_tag close_tag", "$$ = $1 + $2 + $3;"],
-               ["open_tag full_text close_tag", "$$ = $1 + $2 + $3;"],
-               ["open_tag close_tag", "$$ = $1 + $2;"],
-               ["material_open_tag recursive_material_tag close_tag", "$$ = $1 + $2 + $3;"],
-               ["material_open_tag full_text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
-               ["material_open_tag close_tag", "$$ = $1 + $2;"],
+                ["open_tag tags close_tag", "$$ = $1 + $2 + $3;"],
+                ["open_tag close_tag", "$$ = $1 + $2;"],
+                ["material_open_tag material_tags close_tag", "$$ = $1 + $2 + $3;"],
+                ["material_open_tag close_tag", "$$ = $1 + $2;"],
+                ["open_close_tag", "$$ = $1;"],
+                ["only_open_tag", "$$ = $1;"],
             ],
 
-            "recursive_tag":[
-                ["full_text tag full_text", "$$ = $1 + $2 + $3;"],
-                ["full_text tag", "$$ = $1 + $2;"],
-                ["tag full_text", "$$ = $1 + $2;"],
-                ["tag", "$$ = $1;"],
+            "material_tags":[
+                ["full_text", "$$ = GLOBAL._parser.callbacks["+id+"]($1);"],
+                ["material_tag", "$$ = $1;"],
+                ["full_text material_tag material_tags", "$$ = GLOBAL._parser.callbacks["+id+"]($1) + $2 + $3"],
+                ["full_text material_tag", "$$ = GLOBAL._parser.callbacks["+id+"]($1) + $2;"],
+                ["material_tag material_tags", "$$ = $1 + $2;"], //TODO insert also tag full_text material_tags?
             ],
 
             "material_tag":[
-                ["open_tag recursive_material_tag close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
-                ["open_tag full_text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
+                ["open_tag material_tags close_tag", "$$ = $1 + $2 + $3;"],
                 ["open_tag close_tag", "$$ = $1 + $2;"],
-                ["material_open_tag recursive_material_tag close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
-                ["material_open_tag full_text close_tag", "$$ = $1 + GLOBAL._parser.callbacks["+id+"]($2) + $3;"],
+                ["material_open_tag material_tags close_tag", "$$ = $1 + $2 + $3;"],
                 ["material_open_tag close_tag", "$$ = $1 + $2;"],
-            ],
-
-            "recursive_material_tag":[
-                ["full_text material_tag full_text", "$$ = $1 + $2 + $3;"],
-                ["full_text material_tag", "$$ = $1 + $2;"],
-                ["material_tag full_text", "$$ = $1 + $2;"],
-                ["material_tag", "$$ = $1;"],
+                ["open_close_tag", "$$ = $1;"],
+                ["only_open_tag", "$$ = $1;"],
             ],
 
             "open_tag":[
@@ -84,7 +82,7 @@ module.exports = function(callback){
             ],
 
             "close_tag":[
-                ["LT CLOSE closing_text GT", "$$ = $1 + $2 + $3 + $4;"]
+                ["CLOSE_L closing_text GT", "$$ = $1 + $2 + $3;"] //TODO or closing_words?
             ],
 
             "material_open_tag":[
@@ -96,7 +94,7 @@ module.exports = function(callback){
             ],
 
             "open_close_tag":[
-                ["LT non_closing CLOSE GT", "$$ = $1 + $2 + $3 + $4;"]
+                ["LT non_closing CLOSE_G", "$$ = $1 + $2 + $3;"]
             ],
 
             "non_closing":[
