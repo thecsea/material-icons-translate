@@ -24,17 +24,18 @@ module.exports = function(callback){
         "lex": {
             "rules": [
                 ["$",                       "return 'EOF';"],
-                ["\\s+",                       "return 'SPACES'"],
+                ["\\s+",                    "return 'SPACES'"],
+                ["<!--",                    "return 'LC'"],
+                ["--!>",                    "return 'RC'"],
                 ["material-icons",          "return 'MATERIAL'"], //consider to insert \\b
                 ["area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr|!DOCTYPE ", "return 'NON_CLOSING'"], //consider to insert \\b
                 ["<\\/",                     "return 'CLOSE_L'"],
                 ["\\/>",                     "return 'CLOSE_G'"],
-                ["<",                       "return 'LT'"],
-                [">",                       "return 'GT'"],
-                ["[^<>\\/]",               "return 'CHAR'"],
+                ["<",                        "return 'LT'"],
+                [">",                        "return 'GT'"],
+                ["[^<>\\/]",                 "return 'CHAR'"],
             ]
         },
-        //TODO HTML comments
 
         "bnf": {
             "expressions" :[[ "e EOF",   "return $1;"],[ "EOF","return '';"]],
@@ -120,11 +121,22 @@ module.exports = function(callback){
             ],
 
             "full_text":[
-                ["text NON_CLOSING full_text", "$$ = $1 + $2 + $3;"],
-                ["text NON_CLOSING", "$$ = $1 + $2;"],
+                ["text_comments NON_CLOSING full_text", "$$ = $1 + $2 + $3;"],
+                ["text_comments NON_CLOSING", "$$ = $1 + $2;"],
                 ["NON_CLOSING full_text", "$$ = $1 + $2;"],
                 ["NON_CLOSING", "$$ = $1;"],
+                ["text_comments", "$$ = $1;"],
+            ],
+
+            "text_comments":[
+                ["text comments text_comments", "$$ = $1 + $2 + $3;"],
+                ["comments text_comments", "$$ = $1 + $2;"],
+                ["comments", "$$ = $1;"],
                 ["text", "$$ = $1;"],
+            ],
+
+            "comments":[
+                ["LC text RC", "$$ = $1 + $2 + $3;"],
             ],
 
             "text":[
