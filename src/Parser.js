@@ -26,14 +26,14 @@ module.exports = function(callback){
                 ["$",                       "return 'EOF';"],
                 ["\\s+",                    "return 'SPACES'"],
                 ["<!--",                    "return 'LC'"],
-                ["--!>",                    "return 'RC'"],
+                ["--!>|-->",                "return 'RC'"],
                 ["material-icons",          "return 'MATERIAL'"], //consider to insert \\b
                 ["area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr|!DOCTYPE ", "return 'NON_CLOSING'"], //consider to insert \\b
                 ["<\\/",                     "return 'CLOSE_L'"],
                 ["\\/>",                     "return 'CLOSE_G'"],
                 ["<",                        "return 'LT'"],
                 [">",                        "return 'GT'"],
-                ["[^<>\\/]",                 "return 'CHAR'"],
+                ["[^<>]",                    "return 'CHAR'"],
             ]
         },
 
