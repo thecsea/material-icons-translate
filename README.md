@@ -1,4 +1,7 @@
 # material-icons-translator
+
+[![npm version](https://badge.fury.io/js/material-icons-translator.svg)](https://badge.fury.io/js/material-icons-translator)
+
 This library translates all occurrences of material icons name to the unicode form
 
 this library doesn't work if material is added by css
