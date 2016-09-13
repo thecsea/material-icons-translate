@@ -285,6 +285,11 @@ describe('Material Icons Translator', () => {
                 var materialIconsTranslator = new MaterialIconsTranslator('<html><i class="material-icons">delete</i></html>');
                 materialIconsTranslator.simpleTranslate().should.be.equal('<html><i class="material-icons">&#xE872;</i></html>');
             });
+
+            it('Should parse other classes', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<i class="material-icons pippo">delete</i>');
+                materialIconsTranslator.simpleTranslate().should.be.equal('<i class="material-icons pippo">&#xE872;</i>');
+            });
         });
     });
 });
