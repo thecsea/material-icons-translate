@@ -11,9 +11,9 @@ var MaterialIconsTranslator = require('./gulp');
 
 var Task = Elixir.Task;
 
-Elixir.extend('jsonImagesSaver', function (src, pipe, simple)
+Elixir.extend('materialIconsTranslator', function (src, pipe, simple)
 {
-    new Task('jsonImagesSaver', function ()
+    new Task('materialIconsTranslator', function ()
     {
         return Gulp
             .src(src)
