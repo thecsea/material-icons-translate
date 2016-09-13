@@ -10,12 +10,41 @@ var fs = require('fs');
 
 var should = chai.should();
 
+var consoleValue = '';
+var myLog = function(str, str2){
+    "use strict";
+    str2 = str2 || '';
+    consoleValue = str + str2;
+    setLog(false);
+};
+var originalLog = console.log;
+
+function setLog(custom){
+    "use strict";
+    if(custom) {
+        consoleValue = '';
+        console.log = myLog;
+    }else
+        console.log = originalLog;
+}
+
+
 describe('Material Icons Translator', () => {
     describe('New', () => {
         describe('Content', () => {
             it('Should set the content', () => {
                 var materialIconsTranslator = new MaterialIconsTranslator('<aaa class="material-icons">delete</aaa>ssss');
                 materialIconsTranslator.should.have.property('content').equal('<aaa class="material-icons">delete</aaa>ssss');
+            });
+
+            it('Should set automatically the debug value', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaa class="material-icons">delete</aaa>ssss');
+                materialIconsTranslator.should.have.property('debug').equal(false);
+            });
+
+            it('Should set the debug value', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaa class="material-icons">delete</aaa>ssss', true);
+                materialIconsTranslator.should.have.property('debug').equal(true);
             });
         });
     });
@@ -196,6 +225,32 @@ describe('Material Icons Translator', () => {
             it('Should allow to use html comments', () => {
                 var materialIconsTranslator = new MaterialIconsTranslator('<!--comment--!>');
                 materialIconsTranslator.translate().should.be.equal('<!--comment--!>');
+            });
+        });
+    });
+    describe('Lex', () => {
+        "use strict";
+        describe('Simple lex', () => {
+            it('Should lex', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaa class="material-icons">delete</aaa>ssss', true);
+                setLog(true);
+                materialIconsTranslator.translate();
+                consoleValue.should.be.not.equal('');
+            });
+
+            it('Should not lex', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaa class="material-icons">delete</aaa>ssss', false);
+                setLog(true);
+                materialIconsTranslator.translate();
+                consoleValue.should.be.equal('');
+            });
+
+            it('Should retrieve the right lex value', () => {
+                //setLog(true);
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaa class="material-icons">delete</aaa>ssss', true);
+                setLog(true);
+                materialIconsTranslator.translate();
+                consoleValue.should.be.equal('LT\nCHAR\nCHAR\nCHAR\nSPACES\nCHAR\nCHAR\nCHAR\nCHAR\nCHAR\nCHAR\nCHAR\nMATERIAL\nCHAR\nGT\nCHAR\nCHAR\nCHAR\nCHAR\nCHAR\nCHAR\nCLOSE_L\nCHAR\nCHAR\nCHAR\nGT\nCHAR\nCHAR\nCHAR\nCHAR\nEOF\n');
             });
         });
     });

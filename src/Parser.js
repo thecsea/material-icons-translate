@@ -1,11 +1,13 @@
 /**
  * Created by claudio on 09/09/16.
  */
+var JisonLex = require('jison-lex');
+var Parser = require("jison").Parser;
+
 GLOBAL._parser ={};
 GLOBAL._parser.callbacks = [];
 module.exports = function(callback){
     "use strict";
-    var Parser = require("jison").Parser;
 
     function setElement(ele){
        var tmp = callback(ele);
@@ -174,5 +176,18 @@ module.exports = function(callback){
 
     //TODO unset unused callbacks
 
-    return parser;
+    var lexer = new JisonLex(grammar.lex);
+
+    function parse(str, noLex){
+        let parsed = parser.parse(str);
+        let tmp;
+        let lex = '';
+        if(!noLex) {
+            lexer.setInput(str);
+            while ((tmp = lexer.lex()) != 1)
+                lex += tmp + '\n';
+        }
+        return {parsed: parsed, lex: lex};
+    }
+    return parse;
 };

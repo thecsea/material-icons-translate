@@ -7,15 +7,19 @@ var requireText = require('require-text');
 var Utils = require('./Utils');
 var materialTable = requireText('material-design-icons/iconfont/codepoints', require);
 materialTable = materialTable.split(/\n/g).map(value=>value.split(/ /g).list('key', 'value'));
-var parser = require('./Parser')(getUnicode);;
+var parser = require('./Parser')(getUnicode);
 
 module.exports = class MaterialIconsTranslator{
-    constructor(content){
+    constructor(content, debug){
         this.content = content;
+        this.debug = debug || false;
     }
 
     translate(){
-        return parser.parse(this.content);
+        var parsed = parser(this.content, !this.debug);
+        if(this.debug)
+            console.log(parsed.lex);
+        return parsed.parsed;
     }
 
     static getUnicode(name){
