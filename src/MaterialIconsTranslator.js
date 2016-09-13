@@ -19,6 +19,9 @@ module.exports = class MaterialIconsTranslator{
         var parsed = parser(this.content, !this.debug);
         if(this.debug)
             console.log(parsed.lex);
+        if(parsed.error) {
+            throw new Error(parsed.error);
+        }
         return parsed.parsed;
     }
 

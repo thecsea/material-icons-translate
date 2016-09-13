@@ -179,15 +179,25 @@ module.exports = function(callback){
     var lexer = new JisonLex(grammar.lex);
 
     function parse(str, noLex){
-        let parsed = parser.parse(str);
+        let err = '';
+        let parsed = '';
+        try {
+            parsed = parser.parse(str);
+        }catch(e){
+            err += e.message;
+        }
         let tmp;
         let lex = '';
         if(!noLex) {
-            lexer.setInput(str);
-            while ((tmp = lexer.lex()) != 1)
-                lex += tmp + '\n';
+            try {
+                lexer.setInput(str);
+                while ((tmp = lexer.lex()) != 1)
+                    lex += tmp + ' ';
+            }catch(e){
+                err += e.message;
+            }
         }
-        return {parsed: parsed, lex: lex};
+        return {parsed: parsed, lex: lex, error: err};
     }
     return parse;
 };

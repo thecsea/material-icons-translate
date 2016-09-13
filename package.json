@@ -26,6 +26,8 @@
   "dependencies": {
     "extend": "^3.0.0",
     "gulp": "^3.9.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-print": "^2.0.1",
     "gulp-util": "^3.0.7",
     "jison": "^0.4.17",
     "material-design-icons": "^3.0.1",
