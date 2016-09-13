@@ -31,7 +31,8 @@ module.exports = class MaterialIconsTranslator{
 
     static replacer(match, p1, p2, p3, offset, string) {
         // p1 is nondigits, p2 digits, and p3 non-alphanumerics
-        return p1 + MaterialIconsTranslator.getUnicode(p2) + p3; //TODO null
+        p2 = MaterialIconsTranslator.getUnicode(p2) || p2;
+        return [p1, p2, p3].join('');
     }
 
     static getUnicode(name){
