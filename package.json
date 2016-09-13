@@ -1,6 +1,6 @@
 {
   "name": "material-icons-translator",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "This library translates all occurrences of material icons name to the unicode form",
   "main": "index.js",
   "scripts": {

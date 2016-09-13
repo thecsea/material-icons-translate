@@ -17,7 +17,8 @@ var MaterialIconsTranslator = require('./index');
 const PLUGIN_NAME = 'material-icons-translator';
 
 // Plugin level function(dealing with files)
-function gulpMaterialIconsTranslator(debug) {
+function gulpMaterialIconsTranslator(simple, debug) {
+    var MaterialIconsTranslatorCustom =  simple?MaterialIconsTranslator.simple:MaterialIconsTranslator.complex;
     // Creating a stream through which each file will pass
     return through.obj(function(file, enc, cb) {
         if (file.isNull()) {
@@ -26,7 +27,7 @@ function gulpMaterialIconsTranslator(debug) {
         }
         if (file.isBuffer()) {
             try {
-                file.contents = new Buffer(MaterialIconsTranslator(file.contents.toString('utf-8'), debug));
+                file.contents = new Buffer(MaterialIconsTranslatorCustom(file.contents.toString('utf-8'), debug));
             }catch(err)
             {
                 return cb(new PluginError(PLUGIN_NAME, err));

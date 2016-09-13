@@ -3,16 +3,16 @@
  */
 var MaterialIconsTranslator = require('./src/MaterialIconsTranslator');
 
-/**
- *
- * @param content JSON or OBJECT
- * @param options
- * @returns Promise
- */
-module.exports.default = function(content, debug){
+var lib = function (content, debug){
+    "use strict";
+    return lib.simple(content, debug);
+};
+
+lib.complex = function(content, debug){
     return new MaterialIconsTranslator(content, debug).translate();
 };
 
-module.exports.simple = function(content, debug){
+lib.simple = function(content, debug){
     return new MaterialIconsTranslator(content, debug).simpleTranslate();
 };
+module.exports = lib;
