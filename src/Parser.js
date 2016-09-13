@@ -10,7 +10,7 @@ module.exports = function(callback){
     "use strict";
 
     function setElement(ele){
-       var tmp = callback(ele);
+        var tmp = callback(ele);
         if(tmp == null)
             return ele;
         return tmp;
@@ -81,7 +81,7 @@ module.exports = function(callback){
             ],
 
             "open_tag":[
-              ["LT closing_words GT", "$$ = $1 + $2 + $3;"]
+                ["LT closing_words GT", "$$ = $1 + $2 + $3;"]
             ],
 
             "close_tag":[
@@ -138,7 +138,23 @@ module.exports = function(callback){
             ],
 
             "comments":[
-                ["LC text RC", "$$ = $1 + $2 + $3;"],
+                ["LC comments_content RC", "$$ = $1 + $2 + $3;"], //TODO insert also other elements of tags like < and </ /> >
+            ],
+
+            "comments_content":[
+                ["words keywords comments_content", "$$ = $1 + $2 + $3;"],
+                ["keywords comments_content", "$$ = $1 + $2;"],
+                ["words", "$$ = $1;"],
+                ["keywords", "$$ = $1;"],
+            ],
+
+            "keywords":[
+                ["LT", "$$ = $1;"],
+                ["GT", "$$ = $1;"],
+                ["CLOSE_L", "$$ = $1;"],
+                ["CLOSE_G", "$$ = $1;"],
+                ["MATERIAL", "$$ = $1;"],
+                ["NON_CLOSING", "$$ = $1;"],
             ],
 
             "text":[
