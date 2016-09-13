@@ -250,7 +250,26 @@ describe('Material Icons Translator', () => {
                 var materialIconsTranslator = new MaterialIconsTranslator('<aaa class="material-icons">delete</aaa>ssss', true);
                 setLog(true);
                 materialIconsTranslator.translate();
-                consoleValue.should.be.equal('LT\nCHAR\nCHAR\nCHAR\nSPACES\nCHAR\nCHAR\nCHAR\nCHAR\nCHAR\nCHAR\nCHAR\nMATERIAL\nCHAR\nGT\nCHAR\nCHAR\nCHAR\nCHAR\nCHAR\nCHAR\nCLOSE_L\nCHAR\nCHAR\nCHAR\nGT\nCHAR\nCHAR\nCHAR\nCHAR\nEOF\n');
+                consoleValue.should.be.equal('LT CHAR CHAR CHAR SPACES CHAR CHAR CHAR CHAR CHAR CHAR CHAR MATERIAL CHAR GT CHAR CHAR CHAR CHAR CHAR CHAR CLOSE_L CHAR CHAR CHAR GT CHAR CHAR CHAR CHAR EOF ');
+            });
+        });
+    });
+
+    describe('Simple parser', () => {
+        describe('Simple parse', () => {
+            it('Should parse', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<i class="material-icons">delete</i>');
+                materialIconsTranslator.simpleTranslate().should.be.equal('<i class="material-icons">&#xE872;</i>');
+            });
+
+            it('Should parse double', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<i class="material-icons">delete</i><i class="material-icons">delete</i>');
+                materialIconsTranslator.simpleTranslate().should.be.equal('<i class="material-icons">&#xE872;</i><i class="material-icons">&#xE872;</i>');
+            });
+
+            it('Should parse inner', () => {
+                var materialIconsTranslator = new MaterialIconsTranslator('<html><i class="material-icons">delete</i></html>');
+                materialIconsTranslator.simpleTranslate().should.be.equal('<html><i class="material-icons">&#xE872;</i></html>');
             });
         });
     });

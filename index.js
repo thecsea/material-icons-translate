@@ -9,6 +9,10 @@ var MaterialIconsTranslator = require('./src/MaterialIconsTranslator');
  * @param options
  * @returns Promise
  */
-module.exports = function(content, debug){
+module.exports.default = function(content, debug){
     return new MaterialIconsTranslator(content, debug).translate();
-}
+};
+
+module.exports.simple = function(content, debug){
+    return new MaterialIconsTranslator(content, debug).simpleTranslate();
+};

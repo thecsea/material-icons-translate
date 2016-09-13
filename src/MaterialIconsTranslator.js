@@ -25,6 +25,15 @@ module.exports = class MaterialIconsTranslator{
         return parsed.parsed;
     }
 
+    simpleTranslate(){
+        return this.content.replace(/(<i[^<]*material-icons[^<]*>)([^<]*)(<\/i>)/gi, MaterialIconsTranslator.replacer);
+    }
+
+    static replacer(match, p1, p2, p3, offset, string) {
+        // p1 is nondigits, p2 digits, and p3 non-alphanumerics
+        return p1 + MaterialIconsTranslator.getUnicode(p2) + p3; //TODO null
+    }
+
     static getUnicode(name){
         return getUnicode(name);
     }
