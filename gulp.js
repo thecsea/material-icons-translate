@@ -18,6 +18,7 @@ const PLUGIN_NAME = 'material-icons-translator';
 
 // Plugin level function(dealing with files)
 function gulpMaterialIconsTranslator(simple, debug) {
+    simple = simple===false?false:true;
     var MaterialIconsTranslatorCustom =  simple?MaterialIconsTranslator.simple:MaterialIconsTranslator.complex;
     // Creating a stream through which each file will pass
     return through.obj(function(file, enc, cb) {
