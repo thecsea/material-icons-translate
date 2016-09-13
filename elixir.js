@@ -6,7 +6,6 @@ var Gulp = require('gulp');
 
 var Print = require('gulp-print');
 var Plumber = require('gulp-plumber');
-var Changed = require('gulp-changed');
 
 var MaterialIconsTranslator = require('./gulp');
 
@@ -20,7 +19,6 @@ Elixir.extend('materialIconsTranslator', function (src, dest, simple)
             .src(src)
             .pipe(Print())
             .pipe(Plumber())
-            .pipe(Changed(dest))
             .pipe(MaterialIconsTranslator(simple))
             .pipe(Gulp.dest(dest))
             .pipe(Print());
