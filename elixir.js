@@ -21,8 +21,8 @@ Elixir.extend('materialIconsTranslator', function (src, dest, simple)
             .pipe(Print())
             .pipe(Plumber())
             .pipe(Changed(dest))
+            .pipe(MaterialIconsTranslator(simple))
             .pipe(Gulp.dest(dest))
-            .pipe(pipe())
             .pipe(Print());
     }).watch(src);
 });
