@@ -190,6 +190,8 @@ module.exports = function(callback){
         let lex = '';
         if(!noLex) {
             try {
+                if(GLOBAL._parser.lex_error)
+                    throw new Error("test error");
                 lexer.setInput(str);
                 while ((tmp = lexer.lex()) != 1)
                     lex += tmp + ' ';

@@ -243,6 +243,7 @@ describe('Material Icons Translator', () => {
                 setLog(true);
                 materialIconsTranslator.translate();
                 consoleValue.should.be.equal('');
+                setLog(false);
             });
 
             it('Should retrieve the right lex value', () => {
@@ -251,6 +252,19 @@ describe('Material Icons Translator', () => {
                 setLog(true);
                 materialIconsTranslator.translate();
                 consoleValue.should.be.equal('LT CHAR CHAR CHAR SPACES CHAR CHAR CHAR CHAR CHAR CHAR CHAR MATERIAL CHAR GT CHAR CHAR CHAR CHAR CHAR CHAR CLOSE_L CHAR CHAR CHAR GT CHAR CHAR CHAR CHAR EOF ');
+            });
+
+            it('Should throw error', () => {
+                GLOBAL._parser.lex_error = true;
+                var materialIconsTranslator = new MaterialIconsTranslator('<aaa class="material-icons">delete</aaa>ssss', true);
+                setLog(true);
+                var thrown = false;
+                try {
+                    materialIconsTranslator.translate();
+                }catch (e){
+                    thrown = true;
+                }
+                thrown.should.be.equal(true);
             });
         });
     });
