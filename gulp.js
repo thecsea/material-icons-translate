@@ -29,11 +29,11 @@ function gulpMaterialIconsTranslator(simple, debug) {
         if (file.isBuffer()) {
             try {
                 file.contents = new Buffer(MaterialIconsTranslatorCustom(file.contents.toString('utf-8'), debug));
+                return cb(null, file);
             }catch(err)
             {
                 return cb(new PluginError(PLUGIN_NAME, err));
             }
-            return cb(null, file);
         }
         if (file.isStream()) {
             return cb(new PluginError(PLUGIN_NAME, 'Not yet supported'));//file.contents = StreamFromPromise();
