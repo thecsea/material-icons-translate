@@ -17,7 +17,7 @@ there are two versions of the library:
 
 ``` javascript
 const MaterialIconsTranslator = require('material-icons-translator').simple;
-const content = "<aaa class="material-icons">delete</aaa>ssss";
+const content = '<aaa class="material-icons">delete</aaa>ssss';
 const translated = MaterialIconsTranslator(content); //equal to '<aaa class="material-icons">&#xE872;</aaa>ssss'
 ```
 
