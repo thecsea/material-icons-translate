@@ -255,7 +255,7 @@ describe('Material Icons Translator', () => {
             });
 
             it('Should throw error', () => {
-                GLOBAL._parser.lex_error = true;
+                global._parser.lex_error = true;
                 var materialIconsTranslator = new MaterialIconsTranslator('<aaa class="material-icons">delete</aaa>ssss', true);
                 setLog(true);
                 var thrown = false;

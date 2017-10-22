@@ -4,8 +4,8 @@
 var JisonLex = require('jison-lex');
 var Parser = require("jison").Parser;
 
-GLOBAL._parser ={};
-GLOBAL._parser.callbacks = [];
+global._parser ={};
+global._parser.callbacks = [];
 module.exports = function(callback){
     "use strict";
 
@@ -20,7 +20,7 @@ module.exports = function(callback){
         return elements.split(/ /g).map(setElement).join(' ');
     }
 
-    var id = GLOBAL._parser.callbacks.push(setElements)-1;
+    var id = global._parser.callbacks.push(setElements)-1;
 
     var grammar = {
         "lex": {
@@ -64,10 +64,10 @@ module.exports = function(callback){
             ],
 
             "material_tags":[
-                ["full_text", "$$ = GLOBAL._parser.callbacks["+id+"]($1);"],
+                ["full_text", "$$ = global._parser.callbacks["+id+"]($1);"],
                 ["material_tag", "$$ = $1;"],
-                ["full_text material_tag material_tags", "$$ = GLOBAL._parser.callbacks["+id+"]($1) + $2 + $3"],
-                ["full_text material_tag", "$$ = GLOBAL._parser.callbacks["+id+"]($1) + $2;"],
+                ["full_text material_tag material_tags", "$$ = global._parser.callbacks["+id+"]($1) + $2 + $3"],
+                ["full_text material_tag", "$$ = global._parser.callbacks["+id+"]($1) + $2;"],
                 ["material_tag material_tags", "$$ = $1 + $2;"], //TODO insert also tag full_text material_tags?
             ],
 
@@ -190,7 +190,7 @@ module.exports = function(callback){
         let lex = '';
         if(!noLex) {
             try {
-                if(GLOBAL._parser.lex_error)
+                if(global._parser.lex_error)
                     throw new Error("test error");
                 lexer.setInput(str);
                 while ((tmp = lexer.lex()) != 1)
