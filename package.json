@@ -1,6 +1,6 @@
 {
   "name": "material-icons-translator",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "This library translates all occurrences of material icons name to the unicode form",
   "main": "index.js",
   "scripts": {
@@ -32,6 +32,7 @@
     "jison": "^0.4.17",
     "laravel-elixir": "^4.0.0",
     "material-design-icons": "^3.0.1",
+    "loader-utils": "^1.1.0",
     "object.pick": "^1.1.2",
     "require-text": "0.0.1",
     "through2": "^2.0.1"
@@ -40,7 +41,6 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
     "istanbul": "^0.4.5",
-    "loader-utils": "^1.1.0",
     "mocha": "^3.0.2"
   }
 }
