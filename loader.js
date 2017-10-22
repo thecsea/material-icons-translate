@@ -7,6 +7,6 @@ const MaterialIconsTranslator = require('./index');
 const loaderUtils = require('loader-utils');
 
 module.exports = function(source) {
-  let options = loaderUtils.getOptions(this);
+  let options = loaderUtils.getOptions(this) || {};
   return MaterialIconsTranslator.simple(source, options.debug || false);
 };
