@@ -30,7 +30,6 @@
     "gulp-print": "^2.0.1",
     "gulp-util": "^3.0.7",
     "jison": "^0.4.17",
-    "laravel-elixir": "^4.0.0",
     "material-design-icons": "^3.0.1",
     "loader-utils": "^1.1.0",
     "object.pick": "^1.1.2",
