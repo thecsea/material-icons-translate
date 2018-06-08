@@ -1,6 +1,6 @@
 {
   "name": "material-icons-translator",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "This library translates all occurrences of material icons name to the unicode form",
   "main": "index.js",
   "scripts": {
@@ -29,7 +29,6 @@
     "gulp-plumber": "^1.1.0",
     "gulp-print": "^2.0.1",
     "gulp-util": "^3.0.7",
-    "jison": "^0.4.17",
     "material-design-icons": "^3.0.1",
     "loader-utils": "^1.1.0",
     "object.pick": "^1.1.2",

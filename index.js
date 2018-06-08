@@ -8,10 +8,6 @@ var lib = function (content, debug){
     return lib.simple(content, debug);
 };
 
-lib.complex = function(content, debug){
-    return new MaterialIconsTranslator(content, debug).translate();
-};
-
 lib.simple = function(content, debug){
     return new MaterialIconsTranslator(content, debug).simpleTranslate();
 };
